@@ -1,4 +1,3 @@
-
 const GenreSelector = ({
   genres,
   selectedGenre,
