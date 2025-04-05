@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Pulp Fiction",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj6_ot-pRVfLMtc2vyguVf_0m0HUuvdBw2I-EuFXkUIEB_eoAS",
+    "releaseYear": 2004,
+    "genres": ["Action", "Adventure"],
+    "rating": 5,
+    "duration": "2h 30min",
+    "description": "Test description"
+  },
+  {
+    "id": 2,
+    "name": "Bohemian Rhapsody",
+    "imageUrl": "https://www.originalfilmart.com/cdn/shop/products/BohemianRhapsody_2018_french_original_film_art_5000x.jpg?v=1610071563",
+    "releaseYear": 2003,
+    "genres": ["Drama", "Biography", "Music"],
+    "rating": 5,
+    "duration": "2h 30min",
+    "description": "Test description"
+  },
+  {
+    "id": 3,
+    "name": "Kill Bill",
+    "imageUrl": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTdkIQrXgZ_ZpEFonHwwKtTDANVrBe-XPS7CKD3Kzdg6sO9ntSj",
+    "releaseYear": 1994,
+    "genres": ["Oscar winning movie"],
+    "rating": 5,
+    "duration": "2h 30min",
+    "description": "Test description"
+  },
+  {
+    "id": 4,
+    "name": "Avengers",
+    "imageUrl": "https://render.fineartamerica.com/images/rendered/default/poster/5.5/8/break/images/artworkimages/medium/2/5-the-avengers-mikebimages.jpg",
+    "releaseYear": 2004,
+    "genres": ["Action", "Adventure"],
+    "rating": 5,
+    "duration": "2h 30min",
+    "description": "Test description"
+  }
+]

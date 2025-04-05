@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "styled-components": "^6.1.17"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
