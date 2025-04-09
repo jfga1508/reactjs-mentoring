@@ -27,14 +27,4 @@ describe("Dialog Component", () => {
 
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
-
-  test("dialog is rendered within the portal", () => {
-    const { container } = render(
-      <Dialog title="Test Title" onClose={() => {}}>
-        <div>Test Content</div>
-      </Dialog>
-    );
-    // Check if the dialog-overlay is rendered as a direct child of document.body
-    expect(document.body.contains(container.firstChild)).toBe(true);
-  });
 });

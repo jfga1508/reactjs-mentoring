@@ -54,8 +54,9 @@ function App() {
     console.log(`Movie Delete`);
     setDialog({
       title: "Delete movie",
-      children: "test",
+      children: "Are you sure you want to delete this movie?",
       onClose: () => setDialog(null),
+      onConfirm: () => setDialog(null)
     });
   };
   const handleSortChange = (value: string) => {

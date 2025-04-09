@@ -6,7 +6,11 @@
   background-color: #222; /* Dark background */
   color: #fff; /* Light text */
 }
-
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  
+}
 .form-group {
   margin-bottom: 15px;
 }
@@ -20,7 +24,8 @@
   font-size: 0.8em;
 }
 
-.form-group input[type="text"] {
+.form-group input[type="text"],
+.form-group textarea {
   width: 100%;
   padding: 8px;
   border: 1px solid #444;

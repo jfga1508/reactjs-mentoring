@@ -6,9 +6,10 @@ export interface DialogProps {
   title: string;
   children: string | React.ReactNode;
   onClose: () => void;
+  onConfirm?: () => void;
 }
 
-const Dialog = ({ title, children, onClose }: DialogProps) => {
+const Dialog = ({ title, children, onClose, onConfirm }: DialogProps) => {
   const dialogRoot = document.getElementById("dialog-root") || document.body;
 
   const handleClose = (e: React.MouseEvent) => {
@@ -27,6 +28,13 @@ const Dialog = ({ title, children, onClose }: DialogProps) => {
             </button>
           </div>
           <div className="dialog-body">{children}</div>
+          <div className="dialog-footer">
+            {onConfirm && (
+              <button type="submit" className="submit-button" onClick={onConfirm}>
+                CONFIRM
+              </button>
+            )}
+          </div>
         </div>
       </FocusTrap>
     </div>,
