@@ -1,28 +1,60 @@
-import { useState } from "react";
+import styled from "styled-components";
 import "./App.css";
-import Counter from "./components/counter/Counter";
-import GenreSelector from "./components/genreSelector/GenreSelector";
-import SearchBar from "./components/search/Search";
+import MovieTile from "./components/movieTile/MovieTile";
+import SortControl from "./components/sortControl/SortControl";
+import { useState } from "react";
+import MovieDetails, {
+  MovieDetailsProps,
+} from "./components/movieDetails/MovieDetails";
+import data from './data/movies.json';
+
+const MovieTiles = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
 
 function App() {
-  const genres = ["All", "Documentary", "Comedy", "Horror", "Crime"];
-  const [currentGenre, setCurrentGenre] = useState<string>(genres[0]);
+  const [selectedSort, setSelectedSort] = useState<string>();
+  const [selectedMovie, setSelectedMovie] = useState<MovieDetailsProps>();
+  const movies = data;
+
+  const handleMovieClick = (id: number) => {
+    console.log(`Movie clicked`);
+    const selected = movies.find((data) => id === data.id);
+    setSelectedMovie(selected);
+  };
+
+  const handleMovieEdit = () => {
+    console.log(`Movie Edit`);
+  };
+
+  const handleMovieDelete = () => {
+    console.log(`Movie Delete`);
+  };
+  const handleSortChange = (value: string) => {
+    setSelectedSort(value);
+    console.log(`Sort selected ${value}`);
+  };
 
   return (
     <>
-      <Counter initial={0} />
-      <SearchBar
-        initialQuery=""
-        onSearch={(query) => console.log("Callback query: ", query)}
-      />
-      <GenreSelector
-        genres={genres}
-        selectedGenre={currentGenre}
-        onSelect={(genre) => {
-          setCurrentGenre(genre);
-          console.log("Callback genre: ", genre);
-        }}
-      />
+      {selectedMovie && <MovieDetails {...selectedMovie} />}
+      <SortControl selectedValue={selectedSort || ""} onChange={handleSortChange} />
+      <MovieTiles>
+        {movies.map((movie) => (
+          <MovieTile
+            id={movie.id}
+            name={movie.name}
+            imageUrl={movie.imageUrl}
+            genres={movie.genres}
+            releaseYear={movie.releaseYear}
+            onClick={handleMovieClick}
+            onEdit={handleMovieEdit}
+            onDelete={handleMovieDelete}
+          />
+        ))}
+      </MovieTiles>
     </>
   );
 }
