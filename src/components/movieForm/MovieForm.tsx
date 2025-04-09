@@ -119,8 +119,8 @@ const MovieForm = ({ initialMovie, onSubmit }: MovieFormProps) => {
         <div className="form-group">
           <label htmlFor="genre">GENRE</label>
           <div className="genres-options">
-            {genresList.map((genre: string) => (
-              <label>
+            {genresList.map((genre: string, index) => (
+              <label key={index}>
                 <input
                   type="checkbox"
                   value={genre}
