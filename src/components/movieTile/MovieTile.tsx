@@ -9,7 +9,7 @@ interface MovieTileProps {
   releaseYear: number;
   genres: string[];
   onClick: (id: number) => void;
-  onEdit?: () => void;
+  onEdit?: (id: number) => void;
   onDelete?: () => void;
 }
 
@@ -38,7 +38,7 @@ const MovieTile = ({
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onEdit) {
-      onEdit();
+      onEdit(id);
     }
     setIsMenuOpen(false);
   };
