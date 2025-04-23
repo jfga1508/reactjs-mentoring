@@ -5,9 +5,9 @@ import MovieDetails from './MovieDetails';
 const mockProps = {
   imageUrl: 'https://example.com/image.jpg',
   name: 'Test Movie',
-  releaseYear: 2023,
+  releaseYear: '2023',
   genres: ['Action', 'Comedy'],
-  rating: 7.5,
+  rating: '7.5',
   duration: '1h 30m',
   description: 'This is a test movie description.',
 };
