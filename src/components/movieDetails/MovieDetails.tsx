@@ -1,11 +1,12 @@
 import "./MovieDetails.css";
 
 export interface MovieDetailsProps {
-  imageUrl: string;
+  id: number;
   name: string;
-  releaseYear: string;
+  imageUrl: string;
+  releaseYear: number;
   genres: string[];
-  rating: string;
+  rating: number;
   duration: string;
   description: string;
 }
