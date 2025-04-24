@@ -6,7 +6,7 @@ const mockProps = {
   id: 1,
   imageUrl: 'image.jpg',
   name: 'Test Movie',
-  releaseYear: 2023,
+  releaseYear: '2023',
   genres: ['Action', 'Comedy'],
   onClick: jest.fn(),
   onEdit: jest.fn(),

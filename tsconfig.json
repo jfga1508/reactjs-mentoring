@@ -6,6 +6,8 @@
   ],
   "compilerOptions" : {
     "jsx": "react-jsx",
-    "types": ["cypress", "node"]
+    "types": ["cypress", "node"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   }
 }
