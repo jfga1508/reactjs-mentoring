@@ -15,8 +15,9 @@ const SortControl = ({ selectedValue, onChange }: SortControlProps) => {
     <div className="sort-control">
       <label htmlFor="sortby">Sort by:</label>
       <select id="sortby" value={selectedValue} onChange={handleChange}>
-        <option value="releaseDate">Release Date</option>
-        <option value="title">Title</option>
+      <option value="">Recently added</option>
+      <option value="release_date">Release Date</option>
+      <option value="title">Title</option>
       </select>
     </div>
   );

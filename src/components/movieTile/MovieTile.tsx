@@ -6,7 +6,7 @@ interface MovieTileProps {
   id: number;
   imageUrl: string;
   name: string;
-  releaseYear: number;
+  releaseYear: string;
   genres: string[];
   onClick: (id: number) => void;
   onEdit?: (id: number) => void;

@@ -10,16 +10,16 @@ interface MovieFormProps {
 }
 
 const MovieForm = ({ initialMovie, onSubmit }: MovieFormProps) => {
-  const [name, setName] = useState(initialMovie?.name || "");
+  const [name, setName] = useState(initialMovie?.title || "");
   const [releaseYear, setReleaseYear] = useState(
-    initialMovie?.releaseYear || ""
+    initialMovie?.release_date || ""
   );
-  const [imageUrl, setImageUrl] = useState(initialMovie?.imageUrl || "");
-  const [rating, setRating] = useState(initialMovie?.rating || "");
+  const [imageUrl, setImageUrl] = useState(initialMovie?.poster_path || "");
+  const [rating, setRating] = useState(initialMovie?.vote_average || "");
   const [genres, setGenres] = useState<string[]>(initialMovie?.genres || []);
-  const [duration, setDuration] = useState(initialMovie?.duration || "");
+  const [duration, setDuration] = useState(initialMovie?.runtime || "");
   const [description, setDescription] = useState(
-    initialMovie?.description || ""
+    initialMovie?.overview || ""
   );
   const genresList = data;
 
@@ -36,15 +36,14 @@ const MovieForm = ({ initialMovie, onSubmit }: MovieFormProps) => {
     (e: React.FormEvent) => {
       e.preventDefault();
       const movieData: MovieDetailsProps = {
-        name,
-        releaseYear,
-        imageUrl,
-        rating,
+        title: name,
+        release_date: releaseYear,
+        poster_path: imageUrl,
+        vote_average: rating,
         genres,
-        duration,
-        description,
+        runtime: duration,
+        overview: description,
       };
-      console.log(movieData);
       onSubmit(movieData);
     },
     [
