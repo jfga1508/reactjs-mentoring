@@ -1,44 +1,58 @@
 import "./MovieDetails.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { MovieDetailsProps } from "./MovieDetails.interface";
 
-export interface MovieDetailsProps {
-  id?: number;
-  title: string;
-  poster_path: string;
-  release_date: string;
-  genres: string[];
-  vote_average: number | string;
-  runtime: string;
-  overview: string;
-}
+const MovieDetails = () => {
+  const [movie, setMovie] = useState<MovieDetailsProps>();
+  const segmentParams = useParams();
+  const movieId = segmentParams.movieId;
 
-const MovieDetails = ({
-  poster_path,
-  title,
-  release_date,
-  genres,
-  vote_average,
-  runtime,
-  overview,
-}: MovieDetailsProps) => {
+  const moviesApi = axios.create({
+    baseURL: "http://localhost:4000/movies",
+  });
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      const data = await moviesApi
+        .get("/" + movieId)
+        .then((response) => response.data);
+
+      setMovie(data);
+    };
+    fetchMovie()
+  }, [movieId]);
+
   return (
     <div className="movie-details">
-      <img src={poster_path} alt={title} className="movie-details-image" />
-      <div className="movie-details-info">
-        <div className="movie-details-label">
-          <h2>{title}</h2>
-          <span className="movie-details-vote_average">{vote_average}</span>
-        </div>
-        <p className="movie-details-genres">
-          {genres.map((data, index) => {
-            return `${data}${genres.length > ++index ? ", " : ""}`;
-          })}
-        </p>
-        <p className="movie-details-time">
-          <span>{release_date}</span>
-          <span>{runtime}</span>
-        </p>
-        <p className="movie-details-overview">{overview}</p>
-      </div>
+      {movie && (
+        <>
+          <img
+            src={movie.poster_path}
+            alt={movie.title}
+            className="movie-details-image"
+          />
+          <div className="movie-details-info">
+            <div className="movie-details-label">
+              <h2>{movie.title}</h2>
+              <span className="movie-details-vote_average">
+                {movie.vote_average}
+              </span>
+            </div>
+            <p className="movie-details-genres">
+              {movie.genres.map((data, index) => {
+                return `${data}${movie.genres.length > ++index ? ", " : ""}`;
+              })}
+            </p>
+            <p className="movie-details-time">
+              <span>{movie.release_date}</span>
+              <span>{movie.runtime}</span>
+            </p>
+            <p className="movie-details-overview">{movie.overview}</p>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
 import "./MovieForm.css";
-import { MovieDetailsProps } from "../movieDetails/MovieDetails";
 import data from "../../data/genres.json";
+import { MovieDetailsProps } from "../movieDetails/MovieDetails.interface";
 
 interface MovieFormProps {
   initialMovie?: MovieDetailsProps;
