@@ -28,13 +28,13 @@ describe('MovieForm Component', () => {
 
     expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({
-      name: 'Test Movie',
-      releaseYear: '2024-01-01',
-      imageUrl: 'http://example.com',
-      rating: '8.0',
+      title: 'Test Movie',
+      release_date: '2024-01-01',
+      poster_path: 'http://example.com',
+      vote_average: '8.0',
       genres: [],
-      duration: '120',
-      description: ''
+      runtime: '120',
+      overview: ''
     }));
   });
 

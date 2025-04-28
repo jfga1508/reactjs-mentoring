@@ -42,6 +42,7 @@
   text-align: left;
   width: 100%;
   border-radius: 0;
+  color: white;
 }
 
 .movie-tile-menu-dropdown button:hover {

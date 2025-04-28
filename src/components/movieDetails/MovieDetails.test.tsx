@@ -3,13 +3,13 @@ import '@testing-library/jest-dom';
 import MovieDetails from './MovieDetails';
 
 const mockProps = {
-  imageUrl: 'https://example.com/image.jpg',
-  name: 'Test Movie',
-  releaseYear: '2023',
+  poster_path: 'https://example.com/image.jpg',
+  title: 'Test Movie',
+  release_date: '2023',
   genres: ['Action', 'Comedy'],
-  rating: '7.5',
-  duration: '1h 30m',
-  description: 'This is a test movie description.',
+  vote_average: '7.5',
+  runtime: '1h 30m',
+  overview: 'This is a test movie description.',
 };
 
 describe('MovieDetails Component', () => {
@@ -79,7 +79,7 @@ describe('MovieDetails Component', () => {
     expect(timeContainer).toHaveClass('movie-details-time');
 
     const descriptionElement = screen.getByText('This is a test movie description.');
-    expect(descriptionElement).toHaveClass('movie-details-description');
+    expect(descriptionElement).toHaveClass('movie-details-overview');
 
   });
 });
