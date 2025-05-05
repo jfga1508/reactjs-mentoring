@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState, useCallback } from "react";
+import { useForm } from "react-hook-form";
 import "./MovieForm.css";
 import data from "../../data/genres.json";
 import { MovieDetailsProps } from "../movieDetails/MovieDetails.interface";
@@ -10,121 +9,99 @@ interface MovieFormProps {
 }
 
 const MovieForm = ({ initialMovie, onSubmit }: MovieFormProps) => {
-  const [name, setName] = useState(initialMovie?.title || "");
-  const [releaseYear, setReleaseYear] = useState(
-    initialMovie?.release_date || ""
-  );
-  const [imageUrl, setImageUrl] = useState(initialMovie?.poster_path || "");
-  const [rating, setRating] = useState(initialMovie?.vote_average || "");
-  const [genres, setGenres] = useState<string[]>(initialMovie?.genres || []);
-  const [duration, setDuration] = useState(initialMovie?.runtime || "");
-  const [description, setDescription] = useState(
-    initialMovie?.overview || ""
-  );
-  const genresList = data;
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<MovieDetailsProps>({
+      defaultValues: {
+        id: initialMovie?.id,
+        title: initialMovie?.title || "",
+        release_date: initialMovie?.release_date || "",
+        poster_path: initialMovie?.poster_path || "",
+        vote_average: initialMovie?.vote_average || 0,
+        genres: initialMovie?.genres || [],
+        runtime: initialMovie?.runtime || 0,
+        overview: initialMovie?.overview || "",
+      },
+    });
 
-  const handleGenresChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setGenres([...genres, value]);
-    } else {
-      setGenres(genres.filter((g) => g !== value));
-    }
+  const genresList = data;
+  const selectedGenres = watch("genres");
+
+  const onFormSubmit = (data: MovieDetailsProps) => {
+    onSubmit(data);
   };
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      const movieData: MovieDetailsProps = {
-        title: name,
-        release_date: releaseYear,
-        poster_path: imageUrl,
-        vote_average: rating,
-        genres,
-        runtime: duration,
-        overview: description,
-      };
-      onSubmit(movieData);
-    },
-    [
-      name,
-      releaseYear,
-      imageUrl,
-      rating,
-      genres,
-      duration,
-      description,
-      onSubmit,
-    ]
-  );
-
   const handleReset = () => {
-    setName("");
-    setReleaseYear("");
-    setImageUrl("");
-    setRating("");
-    setGenres([]);
-    setDuration("");
-    setDescription("");
+    reset();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="movie-form">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="movie-form">
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="name">TITLE</label>
+          <label htmlFor="title">TITLE</label>
           <input
             type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="title"
+            {...register("title", { required: "Title is required" })}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="releaseYear">RELEASE DATE</label>
+          <label htmlFor="release_date">RELEASE DATE</label>
           <input
             type="text"
-            id="releaseYear"
-            value={releaseYear}
-            onChange={(e) => setReleaseYear(e.target.value)}
+            id="release_date"
+            {...register("release_date", {
+              required: "Release date is required",
+            })}
             placeholder="Input Date"
           />
         </div>
       </div>
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="imageUrl">MOVIE URL</label>
+          <label htmlFor="poster_path">MOVIE URL</label>
           <input
             type="text"
-            id="imageUrl"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            id="poster_path"
+            {...register("poster_path", { required: "Movie URL is required" })}
             placeholder="https://"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="rating">RATING</label>
+          <label htmlFor="vote_average">RATING</label>
           <input
             type="text"
-            id="rating"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
+            id="vote_average"
+            {...register("vote_average", {
+              valueAsNumber: true,
+              required: "Rating is required",
+            })}
           />
         </div>
       </div>
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="genre">GENRE</label>
+          <label htmlFor="genres">GENRE</label>
           <div className="genres-options">
             {genresList.map((genre: string, index) => (
               <label key={index}>
                 <input
                   type="checkbox"
                   value={genre}
-                  checked={genres.includes(genre)}
-                  onChange={handleGenresChange}
+                  checked={selectedGenres?.includes(genre)}
+                  onChange={(e) => {
+                    const { value, checked } = e.target;
+                    if (checked) {
+                      setValue("genres", [...(selectedGenres || []), value]);
+                    } else {
+                      setValue(
+                        "genres",
+                        (selectedGenres || []).filter((g) => g !== value)
+                      );
+                    }
+                  }}
                 />
                 {genre}
               </label>
@@ -133,22 +110,23 @@ const MovieForm = ({ initialMovie, onSubmit }: MovieFormProps) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="duration">RUNTIME</label>
+          <label htmlFor="runtime">RUNTIME</label>
           <input
             type="text"
-            id="duration"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
+            id="runtime"
+            {...register("runtime", {
+              valueAsNumber: true,
+              required: "Runtime is required",
+            })}
             placeholder="minutes"
           />
         </div>
       </div>
       <div className="form-group">
-        <label htmlFor="description">DESCRIPTION</label>
+        <label htmlFor="overview">DESCRIPTION</label>
         <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          id="overview"
+          {...register("overview", { required: "Description is required" })}
           placeholder="Overview"
         />
       </div>
