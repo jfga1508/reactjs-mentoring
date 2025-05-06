@@ -4,7 +4,7 @@ export interface MovieDetailsProps {
   poster_path: string;
   release_date: string;
   genres: string[];
-  vote_average: number | string;
-  runtime: string;
+  vote_average: number;
+  runtime: number;
   overview: string;
 }

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
-import "./MovieTile.css"; // Create this CSS file
+import { Link } from "react-router-dom";
+import "./MovieTile.css"; 
 
 interface MovieTileProps {
   id: number;
@@ -20,7 +21,6 @@ const MovieTile = ({
   releaseYear,
   genres,
   onClick,
-  onEdit,
   onDelete,
 }: MovieTileProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,14 +33,6 @@ const MovieTile = ({
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onEdit) {
-      onEdit(id);
-    }
-    setIsMenuOpen(false);
   };
 
   const handleDeleteClick = (e: React.MouseEvent) => {
@@ -62,7 +54,9 @@ const MovieTile = ({
         <span>...</span>
         {isMenuOpen && (
           <div className="movie-tile-menu-dropdown">
-            <button onClick={handleEditClick}>Edit</button>
+            <Link to={`/movie/${id}/edit`}>
+              <button>Edit</button>
+            </Link>
             <button onClick={handleDeleteClick}>Delete</button>
           </div>
         )}

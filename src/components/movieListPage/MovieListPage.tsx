@@ -3,15 +3,13 @@ import SortControl from "../sortControl/SortControl";
 import React, { useEffect, useState } from "react";
 import { MovieDetailsProps } from "../movieDetails/MovieDetails.interface";
 import { DialogProps } from "../dialog/Dialog";
-import MovieForm from "../movieForm/MovieForm";
-import axios from "axios";
 import { useParams, useSearchParams } from "react-router";
 import SearchBar from "../search/Search";
 import GenreSelector from "../genreSelector/GenreSelector";
 import genres from "../../data/genres.json";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Params } from "./MovieListPage.interface";
-import { Outlet } from "react-router-dom";
+import { getMovies } from "../../helpers/moviesApi";
 
 const Dialog = React.lazy(() => import("../dialog/Dialog"));
 
@@ -31,17 +29,19 @@ const MovieListPage = () => {
   const navigate = useNavigate();
   const segmentParams = useParams();
   const [searchParams] = useSearchParams();
-  const [params, setParams] = useState<Params>({ ...initialQuery, sortBy: searchParams.get("sortBy") || "" });
-
-  const moviesApi = axios.create({
-    baseURL: "http://localhost:4000/movies",
+  const [params, setParams] = useState<Params>({
+    ...initialQuery,
+    sortBy: searchParams.get("sortBy") || "",
   });
 
   useEffect(() => {
-    const convertedParams = new URLSearchParams(params).toString();
-    moviesApi.get("?" + convertedParams).then((response) => {
-      setMovies(response.data.data);
-    });
+    const fetchMovies = async () => {
+      const convertedParams = new URLSearchParams(params).toString();
+      const moviesData = await getMovies(convertedParams);
+      setMovies(moviesData.data);
+    };
+
+    fetchMovies();
   }, [params]);
 
   useEffect(() => {
@@ -56,25 +56,6 @@ const MovieListPage = () => {
 
   const handleMovieClick = async (id: number) => {
     navigate(`/movie/${id}`);
-  };
-
-  const handleMovieAdd = () => {
-    setDialog({
-      title: "Add movie",
-      children: <MovieForm onSubmit={() => {}} />,
-      onClose: () => setDialog(null),
-    });
-  };
-
-  const handleMovieEdit = async (id: number) => {
-    const movie = await moviesApi
-      .get("/" + id)
-      .then((response) => response.data);
-    setDialog({
-      title: "Edit movie",
-      children: <MovieForm initialMovie={movie} onSubmit={() => {}} />,
-      onClose: () => setDialog(null),
-    });
   };
 
   const handleMovieDelete = () => {
@@ -105,14 +86,14 @@ const MovieListPage = () => {
   return (
     <>
       <div className="relative">
-        <button
-          className="movie-add bg-transparent absolute right-0"
-          onClick={handleMovieAdd}
-        >
-          ADD MOVIE
-        </button>
         {<SearchBar initialQuery="" onSearch={handleSearch} />}
-        {<Outlet />}
+        <Link to="/new">
+          <button
+            className="movie-add bg-transparent absolute right-0 top-0"
+          >
+            ADD MOVIE
+          </button>
+        </Link>
       </div>
       <div className="md:flex justify-between">
         <GenreSelector
@@ -137,7 +118,6 @@ const MovieListPage = () => {
                 genres={movie.genres}
                 releaseYear={movie.release_date}
                 onClick={handleMovieClick}
-                onEdit={handleMovieEdit}
                 onDelete={handleMovieDelete}
               />
             ))}

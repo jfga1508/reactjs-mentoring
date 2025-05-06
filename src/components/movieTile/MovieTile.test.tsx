@@ -1,64 +1,110 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MovieTile from './MovieTile';
+import { MemoryRouter } from "react-router-dom";
 
-const mockProps = {
-  id: 1,
-  imageUrl: 'image.jpg',
-  name: 'Test Movie',
-  releaseYear: '2023',
-  genres: ['Action', 'Comedy'],
-  onClick: jest.fn(),
-  onEdit: jest.fn(),
-  onDelete: jest.fn(),
-};
+describe("MovieTile Component", () => {
+  const mockProps = {
+    id: 1,
+    imageUrl: "https://example.com/image.jpg",
+    name: "Test Movie",
+    releaseYear: "2023",
+    genres: ["Action", "Comedy"],
+    onClick: jest.fn(),
+    onDelete: jest.fn(),
+  };
 
-describe('MovieTile', () => {
-  beforeEach(() => {
-    mockProps.onClick.mockClear();
-    mockProps.onEdit.mockClear();
-    mockProps.onDelete.mockClear();
+  it("renders the movie tile with correct data", () => {
+    render(
+      <MemoryRouter>
+        <MovieTile {...mockProps} />
+      </MemoryRouter>
+    );
+
+    // Verify that the image, name, release year, and genres are rendered
+    const imageElement = screen.getByAltText("Test Movie");
+    expect(imageElement).toBeInTheDocument();
+    expect(imageElement).toHaveAttribute("src", "https://example.com/image.jpg");
+
+    expect(screen.getByText("Test Movie")).toBeInTheDocument();
+    expect(screen.getByText("2023")).toBeInTheDocument();
+    expect(screen.getByText("Action, Comedy")).toBeInTheDocument();
   });
 
-  it('renders correctly with all props', () => {
-    render(<MovieTile {...mockProps} />);
+  it("calls onClick handler when the movie tile is clicked", () => {
+    render(
+      <MemoryRouter>
+        <MovieTile {...mockProps} />
+      </MemoryRouter>
+    );
 
-    expect(screen.getByAltText('Test Movie')).toBeInTheDocument();
-    expect(screen.getByText('Test Movie')).toBeInTheDocument();
-    expect(screen.getByText('2023')).toBeInTheDocument();
-    expect(screen.getByText('Action, Comedy')).toBeInTheDocument();
+    // Click on the movie tile
+    const movieTile = screen.getByText("Test Movie").closest(".movie-tile");
+    fireEvent.click(movieTile!);
+
+    // Verify that the onClick handler is called with the correct id
+    expect(mockProps.onClick).toHaveBeenCalledTimes(1);
+    expect(mockProps.onClick).toHaveBeenCalledWith(mockProps.id);
   });
 
-  it('calls onClick when the movie tile is clicked', () => {
-    render(<MovieTile {...mockProps} />);
-    const movieTile = screen.getByText('Test Movie').closest('.movie-tile');
-    fireEvent.click(movieTile as Element);
-    expect(mockProps.onClick).toHaveBeenCalledWith(1);
-  });
+  it("opens and closes the menu when the menu button is clicked", () => {
+    render(
+      <MemoryRouter>
+        <MovieTile {...mockProps} />
+      </MemoryRouter>
+    );
 
-  it('opens the menu when the menu button is clicked', () => {
-    render(<MovieTile {...mockProps} />);
-    const menuButton = screen.getByText('...');
+    // Click on the menu button to open the menu
+    const menuButton = screen.getByText("...");
     fireEvent.click(menuButton);
-    expect(screen.getByText('Edit')).toBeInTheDocument();
-    expect(screen.getByText('Delete')).toBeInTheDocument();
+
+    // Verify that the dropdown menu is displayed
+    const editButton = screen.getByText("Edit");
+    const deleteButton = screen.getByText("Delete");
+    expect(editButton).toBeInTheDocument();
+    expect(deleteButton).toBeInTheDocument();
+
+    // Click on the menu button again to close the menu
+    fireEvent.click(menuButton);
+    expect(editButton).not.toBeInTheDocument();
+    expect(deleteButton).not.toBeInTheDocument();
   });
 
-  it('calls onEdit when the edit button is clicked', () => {
-    render(<MovieTile {...mockProps} />);
-    const menuButton = screen.getByText('...');
-    fireEvent.click(menuButton);
-    const editButton = screen.getByText('Edit');
-    fireEvent.click(editButton);
-    expect(mockProps.onEdit).toHaveBeenCalled();
-  });
+  it("calls onDelete handler when the delete button is clicked", () => {
+    render(
+      <MemoryRouter>
+        <MovieTile {...mockProps} />
+      </MemoryRouter>
+    );
 
-  it('calls onDelete when the delete button is clicked', () => {
-    render(<MovieTile {...mockProps} />);
-    const menuButton = screen.getByText('...');
+    // Open the menu
+    const menuButton = screen.getByText("...");
     fireEvent.click(menuButton);
-    const deleteButton = screen.getByText('Delete');
+
+    // Click on the delete button
+    const deleteButton = screen.getByText("Delete");
     fireEvent.click(deleteButton);
-    expect(mockProps.onDelete).toHaveBeenCalled();
+
+    // Verify that the onDelete handler is called
+    expect(mockProps.onDelete).toHaveBeenCalledTimes(1);
+
+    // Verify that the menu is closed after clicking delete
+    expect(deleteButton).not.toBeInTheDocument();
+  });
+
+  it("generates the correct link for the edit button", () => {
+    render(
+      <MemoryRouter>
+        <MovieTile {...mockProps} />
+      </MemoryRouter>
+    );
+
+    // Open the menu
+    const menuButton = screen.getByText("...");
+    fireEvent.click(menuButton);
+
+    // Verify that the edit button link is correct
+    const editLink = screen.getByText("Edit").closest("a");
+    expect(editLink).toHaveAttribute("href", `/movie/${mockProps.id}/edit`);
   });
 });

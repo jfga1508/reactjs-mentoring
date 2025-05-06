@@ -1,25 +1,18 @@
 import "./MovieDetails.css";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { MovieDetailsProps } from "./MovieDetails.interface";
+import { getMovieById } from "../../helpers/moviesApi";
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState<MovieDetailsProps>();
   const segmentParams = useParams();
   const movieId = segmentParams.movieId;
 
-  const moviesApi = axios.create({
-    baseURL: "http://localhost:4000/movies",
-  });
-
   useEffect(() => {
     const fetchMovie = async () => {
-      const data = await moviesApi
-        .get("/" + movieId)
-        .then((response) => response.data);
-
-      setMovie(data);
+      const moviesData = await getMovieById(Number(movieId));
+      setMovie(moviesData);
     };
     fetchMovie()
   }, [movieId]);
