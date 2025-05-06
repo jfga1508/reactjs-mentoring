@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const GenreSelector = ({
   genres,
   selectedGenre,
@@ -17,8 +19,9 @@ const GenreSelector = ({
   return (
     <div className="card">
       {genres.map((genre) => (
-        <button
+        <Link
           key={genre}
+          to={`/movies/genres/${genre}`}
           onClick={() => handleGenreClick(genre)}
           style={{
             margin: "5px",
@@ -35,7 +38,7 @@ const GenreSelector = ({
           }}
         >
           {genre}
-        </button>
+        </Link>
       ))}
     </div>
   );
