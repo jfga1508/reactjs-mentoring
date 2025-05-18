@@ -1,0 +1,50 @@
+.movie-tile {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.movie-tile img {
+  max-width: 100%;
+  height: auto;
+}
+
+.movie-tile-menu {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.movie-tile-menu-dropdown {
+  position: absolute;
+  width: 150px;
+  top: 100%;
+  right: 0;
+  background-color: #242424;
+  border: 1px solid #ccc;
+  padding: 5px 0;
+  z-index: 1;
+}
+.movie-tile-menu-dropdown button {
+  display: block;
+  padding: 5px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  border-radius: 0;
+  color: white;
+}
+
+.movie-tile-menu-dropdown button:hover {
+  background-color: #f25261;
+}

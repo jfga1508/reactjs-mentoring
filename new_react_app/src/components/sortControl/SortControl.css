@@ -1,0 +1,9 @@
+.sort-control {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.sort-control label {
+  margin-right: 10px;
+}
