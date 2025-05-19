@@ -1,40 +1,82 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GenreSelector from './GenreSelector';
+import { MemoryRouter } from "react-router-dom";
+import GenreSelector from "./GenreSelector";
 
-describe('GenreSelector Component', () => {
-  test('Test that component renders all genres passed in props', () => {
-    const genres = ['Action', 'Comedy', 'Drama', 'Horror'];
-    render(<GenreSelector genres={genres} selectedGenre="" onSelect={() => {}} />);
+describe("GenreSelector Component", () => {
+  const genres = ["Action", "Comedy", "Drama"];
+  const selectedGenre = "Comedy";
+  const onSelect = jest.fn();
 
-    const genreButtons = genres.map((genre) => screen.getByText(genre));
+  it("renders genres as clickable links", () => {
+    render(
+      <MemoryRouter>
+        <GenreSelector genres={genres} selectedGenre={selectedGenre} />
+      </MemoryRouter>
+    );
 
-    genreButtons.forEach((button) => {
-      expect(button).toBeInTheDocument();
+    // Verify all genres are rendered
+    genres.forEach((genre) => {
+      const linkElement = screen.getByText(genre);
+      expect(linkElement).toBeInTheDocument();
+      expect(linkElement).toHaveAttribute("href", `/movies/genres/${genre}`);
     });
   });
 
-  test('Test that component highlights a selected genre passed in props', () => {
-    const genres = ['Action', 'Comedy', 'Drama', 'Horror'];
-    const selectedGenre = 'Horror';
-    render(<GenreSelector genres={genres} selectedGenre={selectedGenre} onSelect={() => {}} />);
+  it("highlights the selected genre", () => {
+    render(
+      <MemoryRouter>
+        <GenreSelector genres={genres} selectedGenre={selectedGenre} />
+      </MemoryRouter>
+    );
 
-    const selectedButton = screen.getByText(selectedGenre);
+    // Verify the selected genre has the correct border color
+    const selectedElement = screen.getByText(selectedGenre);
+    expect(selectedElement).toHaveStyle("border-bottom: 1px solid #F65261");
 
-    expect(selectedButton).toHaveStyle({
-      borderBottom: '1px solid #F65261',
-    });
+    // Verify other genres do not have the highlight
+    genres
+      .filter((genre) => genre !== selectedGenre)
+      .forEach((genre) => {
+        const genreElement = screen.getByText(genre);
+        expect(genreElement).toHaveStyle("border-bottom: 0px solid #FFF");
+      });
   });
 
-  test('Test that after a click event on a genre button component calls "onChange" callback and passes correct genre in arguments', () => {
-    const genres = ['Action', 'Comedy', 'Drama', 'Horror'];
-    const mockOnSelect = jest.fn();
-    render(<GenreSelector genres={genres} selectedGenre="" onSelect={mockOnSelect} />);
+  it("calls onSelect with the correct genre when clicked", () => {
+    render(
+      <MemoryRouter>
+        <GenreSelector
+          genres={genres}
+          selectedGenre={selectedGenre}
+          onSelect={onSelect}
+        />
+      </MemoryRouter>
+    );
 
-    const genreButton = screen.getByText('Horror');
-    fireEvent.click(genreButton);
+    // Click on a genre
+    const genreToClick = "Drama";
+    const genreElement = screen.getByText(genreToClick);
+    fireEvent.click(genreElement);
 
-    expect(mockOnSelect).toHaveBeenCalledTimes(1);
-    expect(mockOnSelect).toHaveBeenCalledWith('Horror');
+    // Verify the callback is called with the correct genre
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith(genreToClick);
+  });
+
+  it("does not call onSelect if onSelect is not provided", () => {
+    render(
+      <MemoryRouter>
+        <GenreSelector genres={genres} selectedGenre={selectedGenre} />
+      </MemoryRouter>
+    );
+
+    // Click on a genre
+    const genreToClick = "Drama";
+    const genreElement = screen.getByText(genreToClick);
+    fireEvent.click(genreElement);
+
+    // Verify no callback is called
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });
